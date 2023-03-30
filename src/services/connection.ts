@@ -1,4 +1,4 @@
-import apiClient from '../utils/apiClient';
+import apiClient from '../utils/apiClients/apiClient';
 
 export const addConnection = async (id: number, connection: string): Promise<number> => {
 	const response = await apiClient.get('/add', {

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { getSingleEntity } from './sparqlClient';
 import { getResourceName } from './resources';
 import { type Object3D } from 'three';
+import { getSingleEntity } from '../services/entities';
 
 export const generateAStickman = (): THREE.Group => {
 	const stickman = new THREE.Group();

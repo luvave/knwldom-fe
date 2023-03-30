@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '../../services/user';
 import ForceGraph3D from '3d-force-graph';
-import { useEffect, useRef } from 'react';
+import { Button, Container } from '@nextui-org/react';
+import { useEffect, useRef, useState } from 'react';
 import { generateAStickman, getLoadingImage } from '../../utils/3dObjects';
+import { createGraphFromUserDto } from '../../utils/graph';
+import { AddNewModal } from '../AddNewModal/AddNewModal';
 
 interface Props {
 	userId: number;
@@ -10,8 +13,9 @@ interface Props {
 
 export const Graph = ({ userId }: Props): JSX.Element => {
 	const containerRef = useRef(null);
+	const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryKey: ['user', userId],
 		queryFn: () => getUserById(userId),
 	});
@@ -37,24 +41,7 @@ export const Graph = ({ userId }: Props): JSX.Element => {
 			});
 
 		if (typeof data !== 'undefined') {
-			graph.graphData({
-				nodes: [
-					{ id: -1, name: data?.name, group: -1 },
-					...(data?.hasConnectionTo?.map((c, index) => {
-						return {
-							id: c,
-							name: c,
-							group: index,
-						};
-					}) ?? []),
-				],
-				links: data?.hasConnectionTo?.map((c) => {
-					return {
-						source: -1,
-						target: c,
-					};
-				}),
-			});
+			graph.graphData(createGraphFromUserDto(data));
 
 			const node = graph.graphData().nodes.find((n) => n.id === -1);
 			if (typeof node !== 'undefined') {
@@ -73,10 +60,19 @@ export const Graph = ({ userId }: Props): JSX.Element => {
 
 	return (
 		<>
-			<div style={{ position: 'absolute' }} ref={containerRef} />
-			<div style={{ position: 'absolute', right: 0, margin: '30px', zIndex: 2 }}>
-				<button>TODO: Open a modal</button>
-			</div>
+			<Container css={{ position: 'absolute' }} ref={containerRef} />
+			<Container css={{ position: 'absolute', width: '200px', right: '15px', margin: '20px', zIndex: 2 }}>
+				<Button
+					color="gradient"
+					shadow
+					onPress={() => {
+						setModalOpen(true);
+					}}
+				>
+					Add new
+				</Button>
+			</Container>
+			<AddNewModal userId={userId} open={modalOpen} setOpen={setModalOpen} afterAddFunc={refetch} />
 		</>
 	);
 };

@@ -1,4 +1,4 @@
-import apiClient from '../utils/apiClient';
+import apiClient from '../utils/apiClients/apiClient';
 import type { UserDto } from 'types/user';
 import type { AxiosResponse } from 'axios';
 
