@@ -1,0 +1,13 @@
+{
+	"env": { "browser": true, "es2021": true },
+	"extends": ["plugin:react/recommended", "standard-with-typescript", "prettier"],
+	"ignorePatterns": ["vite.config.ts", "**/*.d.ts"],
+	"overrides": [],
+	"parserOptions": { "ecmaVersion": "latest", "sourceType": "module", "project": "./tsconfig.json" },
+	"plugins": ["react", "prettier"],
+	"rules": {
+		"prettier/prettier": ["error", { "singleQuote": true, "endOfLine": "auto" }],
+		"react/react-in-jsx-scope": "off",
+		"@typescript-eslint/promise-function-async": "off"
+	}
+}
