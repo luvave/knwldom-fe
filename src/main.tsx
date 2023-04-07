@@ -6,6 +6,7 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
 // Main Component
 import App from './App';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 const queryClient = new QueryClient();
 
@@ -33,7 +34,19 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 				}}
 			>
 				<NextUIProvider>
-					<App />
+					<Auth0Provider
+						domain="dev-glsq34l88orjm8b1.us.auth0.com"
+						clientId="4vqE5XNiGVyMUQONnGsPTQD2HoCxEQEm"
+						audience="http://knwldom.com/api"
+						cacheLocation="localstorage"
+						authorizationParams={{
+							redirect_uri: window.location.origin,
+							audience: 'http://knwldom.com/api',
+							scope: 'read:all',
+						}}
+					>
+						<App />
+					</Auth0Provider>
 				</NextUIProvider>
 			</NextThemesProvider>
 		</QueryClientProvider>
