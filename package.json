@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"3d-force-graph": "^1.71.2",
+		"@auth0/auth0-react": "^2.0.1",
 		"@nextui-org/react": "^1.0.0-beta.12",
 		"@tanstack/react-query": "^4.28.0",
 		"@types/dompurify": "^3.0.0",
@@ -26,6 +27,7 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-query": "^3.39.3",
+		"react-router-dom": "^6.10.0",
 		"sparql-http-client": "^2.4.2",
 		"three": "^0.150.1",
 		"vite-plugin-ejs": "^1.6.4",

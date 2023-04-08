@@ -3,7 +3,7 @@ import DOMPurify from 'dompurify';
 import { Button, Container, Input, useInput } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import { lookupSearch } from '../../services/lookup';
-import { addConnection } from '../../services/connection';
+import { addRelation } from '../../services/relation';
 import { formatResourceFromLookup } from '../../utils/resources';
 
 interface Props {
@@ -25,7 +25,10 @@ export const AddNewModal = ({ userId, afterAddFunc, open, setOpen }: Props) => {
 
 	const addEntity = async (value: string) => {
 		try {
-			await addConnection(userId, value);
+			await addRelation({
+				userId,
+				relation: value,
+			});
 			if (typeof afterAddFunc === 'function') {
 				afterAddFunc();
 			}
