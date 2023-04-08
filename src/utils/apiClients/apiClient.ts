@@ -13,7 +13,6 @@ apiClient.interceptors.request.use(
 		if (token !== null) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
-
 		return config;
 	},
 

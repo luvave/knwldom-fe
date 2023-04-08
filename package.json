@@ -27,6 +27,7 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-query": "^3.39.3",
+		"react-router-dom": "^6.10.0",
 		"sparql-http-client": "^2.4.2",
 		"three": "^0.150.1",
 		"vite-plugin-ejs": "^1.6.4",

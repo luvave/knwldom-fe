@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 yarn.lock
-.env
+
+# Local environment variables
+.env.*.local
