@@ -6,13 +6,13 @@ import { ThemeProvider } from './components/Providers/ThemeProvider';
 const queryClient = new QueryClient();
 
 export default function App(): JSX.Element {
-	return (
-		<QueryClientProvider client={queryClient}>
-			<ThemeProvider>
-				<AuthProvider>
-					<RoutesRouter />
-				</AuthProvider>
-			</ThemeProvider>
-		</QueryClientProvider>
-	);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <RoutesRouter />
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
 }

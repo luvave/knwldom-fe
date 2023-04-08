@@ -1,5 +1,5 @@
 export interface UserDto {
-	name?: string;
-	id?: number;
-	hasConnectionTo?: string[];
+  name?: string;
+  id?: number;
+  hasConnectionTo?: string[];
 }

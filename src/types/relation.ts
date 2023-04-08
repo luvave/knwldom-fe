@@ -1,4 +1,4 @@
 export interface RelationDto {
-	userId?: number;
-	relation?: string;
+  userId?: number;
+  relation?: string;
 }

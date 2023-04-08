@@ -1,47 +1,38 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Container, Text, Button } from '@nextui-org/react';
+import { Button } from '../components/common/Buttons/Button';
+import { CenteredContainer } from '../components/common/Containers/CenteredContainer';
+import { HeaderText } from '../components/common/Text/HeaderText';
 
 export const LandingPage = () => {
-	const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect } = useAuth0();
 
-	return (
-		<Container
-			css={{
-				display: 'flex',
-				flexFlow: 'column',
-				gap: '10px',
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}
-		>
-			<Text
-				h1
-				size={60}
-				css={{
-					backgroundImage: 'linear-gradient(45deg, #5514B4, #FF80FF)',
-					WebkitBackgroundClip: 'text',
-					WebkitTextFillColor: 'transparent',
-				}}
-				weight="bold"
-			>
-				Kingdom of Knowledge
-			</Text>
-			<Button color="gradient" auto onPress={() => loginWithRedirect()}>
-				Log in
-			</Button>
-			<Button
-				color="gradient"
-				auto
-				onPress={() =>
-					loginWithRedirect({
-						authorizationParams: {
-							screen_hint: 'signup',
-						},
-					})
-				}
-			>
-				Sign up
-			</Button>
-		</Container>
-	);
+  const onLogin = () => loginWithRedirect();
+  const onSignup = () =>
+    loginWithRedirect({
+      authorizationParams: {
+        screen_hint: 'signup',
+      },
+    });
+
+  return (
+    <CenteredContainer
+      css={{
+        gap: '20px',
+      }}
+    >
+      <HeaderText>Kingdom of Knowledge</HeaderText>
+      <Button
+        type='gradient'
+        onClick={onLogin}
+      >
+        Log in
+      </Button>
+      <Button
+        type='gradient'
+        onClick={onSignup}
+      >
+        Sign up
+      </Button>
+    </CenteredContainer>
+  );
 };

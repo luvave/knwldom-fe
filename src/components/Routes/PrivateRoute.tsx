@@ -4,34 +4,34 @@ import { useEffect, useState } from 'react';
 import { CenteredLoading } from '../common/CenteredLoading';
 
 const PrivateRoute = () => {
-	const { user, isLoading, getAccessTokenSilently } = useAuth0();
+  const { user, isLoading, getAccessTokenSilently } = useAuth0();
 
-	const [loading, setLoading] = useState(isLoading);
+  const [loading, setLoading] = useState(isLoading);
 
-	const handleAuthenticated = async () => {
-		try {
-			const token = await getAccessTokenSilently();
-			localStorage.setItem('accesstoken', token);
-		} catch (e) {
-			// console.error(e);
-		} finally {
-			setLoading(false);
-		}
-	};
+  const handleAuthenticated = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      localStorage.setItem('accesstoken', token);
+    } catch (e) {
+      // console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-	useEffect(() => {
-		if (!isLoading) {
-			void handleAuthenticated();
-		}
-	}, [isLoading]);
+  useEffect(() => {
+    if (!isLoading) {
+      void handleAuthenticated();
+    }
+  }, [isLoading]);
 
-	if (loading) return <CenteredLoading />;
+  if (loading) return <CenteredLoading />;
 
-	if (user !== null && typeof user !== 'undefined') {
-		return <Outlet />;
-	} else {
-		return <Navigate to={'/'} />;
-	}
+  if (user !== null && typeof user !== 'undefined') {
+    return <Outlet />;
+  } else {
+    return <Navigate to={'/'} />;
+  }
 };
 
 export default PrivateRoute;
