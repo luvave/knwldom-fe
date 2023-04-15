@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '../../services/user';
 import ForceGraph3D from '3d-force-graph';
 import { useEffect, useRef, useState } from 'react';
-import { generateAStickman, getLoadingImage } from '../../utils/3dObjects';
+import { generateAStickman } from '../../utils/3dObjects';
 import { createGraphFromUserDto } from '../../utils/graph';
 import { AddNewModal } from '../AddNewModal/AddNewModal';
 import { Button } from '../common/Buttons/Button';
@@ -33,18 +33,33 @@ export const Graph = ({ userId }: Props): JSX.Element => {
       })
       .nodeAutoColorBy('group')
       .onNodeClick((node, event) => {
-        if ('group' in node && 'name' in node && typeof node.name === 'string' && node.group !== -1) {
-          window.open(node.name, '_blank');
-        }
+        // if ('group' in node && 'name' in node && typeof node.name === 'string' && node.group !== -1) {
+        //   window.open(node.name, '_blank');
+        // }
+        // Aim at node from outside it
+        const distance = 40;
+        const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
+
+        const newPos =
+          node.x || node.y || node.z
+            ? { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }
+            : { x: 0, y: 0, z: distance }; // special case if node is in (0,0,0)
+
+        graph.cameraPosition(
+          newPos, // new position
+          node, // lookAt ({ x, y, z })
+          3000, // ms transition duration
+        );
       })
       .nodeThreeObject((object) => {
-        if (object.id === -1) {
-          return generateAStickman();
-        } else if ('name' in object && typeof object.name === 'string') {
-          return getLoadingImage(object.name);
-        }
-        // TODO: Return some default object
-        return generateAStickman();
+        return generateAStickman(object);
+        //   if (object.id === -1) {
+        //     return generateAStickman();
+        //   } else if ('name' in object && typeof object.name === 'string') {
+        //     return getLoadingImage(object.name);
+        //   }
+        //   // TODO: Return some default object
+        //   return generateAStickman();
       });
 
     if (typeof data !== 'undefined') {

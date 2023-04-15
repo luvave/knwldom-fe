@@ -7,7 +7,14 @@ export const getAllUsers = async (): Promise<UserDto[]> => {
   return data;
 };
 
+const user: UserDto = {
+  name: 'Lukas',
+  id: 2,
+  hasConnectionTo: ['typescript', 'CTU'],
+};
+
 export const getUserById = async (id: number): Promise<UserDto> => {
-  const { data } = await apiClient.get<UserDto, AxiosResponse<UserDto>>(`/user/${id}`);
-  return data;
+  // const { data } = await apiClient.get<UserDto, AxiosResponse<UserDto>>(`/user/${id}`);
+  // return data;
+  return await new Promise<UserDto>((resolve, reject) => resolve(user));
 };
