@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { getResourceName } from './resources';
 import { type Object3D } from 'three';
 import { getSingleEntity } from '../services/entities';
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
-export const generateAStickman = (): THREE.Group => {
+export const generateAStickman = (node): THREE.Group => {
   const stickman = new THREE.Group();
 
   const headGeometry = new THREE.SphereGeometry(0.5, 32, 32);
@@ -41,6 +42,17 @@ export const generateAStickman = (): THREE.Group => {
   leftLeg.position.x = -0.5;
   leftLeg.position.y = 0.5;
   stickman.add(leftLeg);
+
+  const nodeEl = document.createElement('div');
+  nodeEl.textContent = node.id;
+  nodeEl.style.color = node.color;
+  nodeEl.style.fontWeight = 'bold';
+  nodeEl.className = 'node-label';
+  const textObject = new CSS2DObject(nodeEl);
+  textObject.position.x = 0.0;
+  textObject.position.y = -1.2;
+
+  stickman.add(textObject);
 
   return stickman;
 };

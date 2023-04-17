@@ -13,6 +13,9 @@ export const FloatingContainer = styled(Container, {
       right: {
         right: '15px',
       },
+      center: {
+        left: 'calc(50% - 200px)',
+      },
     },
   },
 });
