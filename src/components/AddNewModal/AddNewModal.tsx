@@ -3,71 +3,113 @@ import DOMPurify from 'dompurify';
 import { useInput } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import { lookupSearch } from '../../services/lookup';
-import { addRelation } from '../../services/relation';
 import { formatResourceFromLookup } from '../../utils/resources';
 import { Button } from '../common/Buttons/Button';
 import { BasicContainer } from '../common/Containers/BasicContainer';
 import { BasicInput } from '../common/Input/BasicInput';
+import { addRelation, addRelationType, useGetAllRelationTypes } from '../../services/generatedApi/api';
+import { useTranslation } from 'react-i18next';
+import { Autocomplete } from '../common/Autocomplete/Autocomplete';
+import { useState } from 'react';
+import { type RelationTypeDto } from '../../types/generatedApi';
 
 interface Props {
-  userId: number;
+  graphUri: string;
   open: boolean;
   setOpen: (value: boolean) => void;
-  afterAddFunc: any;
+  afterAddFunc: () => void;
+  currentRelationCount: number;
 }
 
-export const AddNewModal = ({ userId, afterAddFunc, open, setOpen }: Props) => {
+export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRelationCount }: Props) => {
+  const { t } = useTranslation();
   const { value, reset, bindings } = useInput('');
+  const [selectedRelationType, setSelectedRelationType] = useState<RelationTypeDto | null>();
 
-  const { data, refetch } = useQuery({
+  const { data: lookupData, refetch: lookupRefetch } = useQuery({
     queryKey: ['lookupSearch', value],
     queryFn: () => lookupSearch(value),
     enabled: false,
     refetchOnWindowFocus: false,
   });
 
+  const {
+    data: relationTypes,
+    refetch: refetchRelationTypes,
+    isFetching: relationTypesFetching,
+  } = useGetAllRelationTypes();
+
   const addEntity = async (value: string) => {
     try {
       await addRelation({
-        userId,
-        relation: value,
+        relationType: {
+          relationUri: selectedRelationType?.relationUri,
+        },
+        relationUri: `relation_${graphUri}_${currentRelationCount + 1}`,
+        from: graphUri,
+        to: value,
       });
       if (typeof afterAddFunc === 'function') {
         afterAddFunc();
       }
       setOpen(false);
     } catch {
-      throw new Error('Unable to add connection');
+      throw new Error(t('graphPage.addNewModal.addRelationError'));
+    }
+  };
+
+  const addRelationTypeOption = async (value: string) => {
+    try {
+      await addRelationType({
+        relationName: value ?? '',
+        relationUri: value ?? '',
+      });
+      await refetchRelationTypes();
+    } catch {
+      throw new Error(t('graphPage.addNewModal.addRelationTypeError'));
     }
   };
 
   const handleClick = () => {
-    void refetch();
+    void lookupRefetch();
   };
 
   const getBody = () => {
     return (
       <BasicContainer>
+        <Autocomplete<RelationTypeDto>
+          options={relationTypes ?? []}
+          value={selectedRelationType ?? null}
+          onChange={(newVal) => {
+            setSelectedRelationType(newVal);
+            if (newVal === null) reset();
+          }}
+          isClearable
+          isLoading={relationTypesFetching}
+          getOptionLabel={(rel) => rel.relationName ?? ''}
+          onCreateOption={(newRel) => addRelationTypeOption(newRel)}
+        />
         <BasicContainer css={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
           <BasicInput
             onClearClick={reset}
             clearable
             bordered
             color='primary'
-            placeholder='Enter search keyword..'
-            label='Search'
+            placeholder={t('graphPage.addNewModal.searchPlaceholder')}
+            label={t('graphPage.addNewModal.search')}
             value={bindings.value}
             onChange={bindings.onChange}
           />
           <Button
             type='secondary'
             onClick={handleClick}
+            disabled={!selectedRelationType}
           >
-            Search
+            {t('graphPage.addNewModal.search')}
           </Button>
         </BasicContainer>
         <BasicContainer css={{ marginTop: '20px' }}>
-          {data?.docs?.map((entity) => {
+          {lookupData?.docs?.map((entity) => {
             const { label, resource } = entity;
             if (
               typeof label === 'undefined' ||
@@ -98,7 +140,7 @@ export const AddNewModal = ({ userId, afterAddFunc, open, setOpen }: Props) => {
       setOpen={setOpen}
       open={open}
       body={getBody()}
-      title='Connect new entity'
+      title={t('graphPage.addNewModal.title')}
     />
   );
 };

@@ -1,0 +1,20 @@
+{
+  "landingPage": {
+    "title": "Kingdom of Knowledge",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out"
+  },
+  "graphPage": {
+    "addNew": "Add new relation",
+    "addNewModal": {
+      "title": "Connect new entity",
+      "search": "Search",
+      "searchPlaceholder": "Enter search keyword..",
+      "addRelationError": "Unable to add relation",
+      "addRelationTypeError": "Unable to add new relation type"
+    },
+    "error": "Something went wrong while loading graphs.",
+    "initialGraphError": "Failed to get initial graph."
+  }
+}

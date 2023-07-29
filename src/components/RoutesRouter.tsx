@@ -1,8 +1,8 @@
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
-import { LandingPage } from '../pages/LandingPage';
-import { GraphPage } from '../pages/GraphPage';
+import { LandingPage } from '../pages/LandingPage/LandingPage';
 import { FourOhFourPage } from '../pages/FourOhFourPage';
 import PrivateRoute from './Routes/PrivateRoute';
+import { GraphPageWrapped } from '../pages/GraphPage/GraphPageWrapped';
 
 export const RoutesRouter = () => {
   return (
@@ -10,13 +10,12 @@ export const RoutesRouter = () => {
       <Routes>
         <Route
           path='/'
-          exact
           element={<LandingPage />}
         />
         <Route element={<PrivateRoute />}>
           <Route
             path='/app'
-            element={<GraphPage />}
+            element={<GraphPageWrapped />}
           />
         </Route>
         <Route

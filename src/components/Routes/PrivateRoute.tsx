@@ -27,7 +27,7 @@ const PrivateRoute = () => {
 
   if (loading) return <CenteredLoading />;
 
-  if (user !== null && typeof user !== 'undefined') {
+  if (user !== null && typeof user !== 'undefined' && typeof user.sub !== 'undefined') {
     return <Outlet />;
   } else {
     return <Navigate to={'/'} />;
