@@ -1,5 +1,14 @@
 import { type RelationDto } from '../../types/generatedApi';
 import { ForceGraph2D, ForceGraph3D } from 'react-force-graph';
+import { generateAStickman, getLoadingImage } from '../../utils/3dObjects';
+import {
+  focusOnNode,
+  getGraphData,
+  getLinkObject,
+  getNodeLabel,
+  linkPositionUpdate,
+  viewNodeInfo,
+} from './GraphHandlers';
 
 interface Props {
   graphRef: any;
@@ -9,41 +18,37 @@ interface Props {
 }
 
 export const Graph = ({ graphStartUri, graphRef, relations, type }: Props) => {
-  const getGraphData = (relations: RelationDto[]) => {
-    return {
-      nodes: [
-        { id: graphStartUri, name: 'You', group: -1 },
-        ...(relations.map((c, index) => {
-          return {
-            id: c.to,
-            name: c.to,
-            group: index,
-          };
-        }) ?? []),
-      ],
-      links:
-        relations.map((c) => {
-          return {
-            source: c.from,
-            target: c.to,
-          };
-        }) ?? [],
-    };
+  const focusOnInitialNode = (node: any) => {
+    if (node.id === graphStartUri) {
+      return generateAStickman();
+    }
+    return getLoadingImage(node.id);
   };
 
   if (type === '2D') {
     return (
       <ForceGraph2D
         ref={graphRef}
-        graphData={getGraphData(relations)}
+        graphData={getGraphData(relations, graphStartUri)}
       />
     );
   }
 
+  // TODO: When three.js supports WebGPU use WebGPURenderer extraRenderer
   return (
     <ForceGraph3D
       ref={graphRef}
-      graphData={getGraphData(relations)}
+      nodeThreeObject={focusOnInitialNode}
+      onNodeClick={(node) => {
+        focusOnNode(node, graphRef);
+        viewNodeInfo(node);
+      }}
+      linkThreeObjectExtend
+      linkThreeObject={getLinkObject}
+      graphData={getGraphData(relations, graphStartUri)}
+      linkPositionUpdate={linkPositionUpdate}
+      nodeAutoColorBy='group'
+      nodeLabel={getNodeLabel}
     />
   );
 };

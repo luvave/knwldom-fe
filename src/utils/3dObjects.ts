@@ -45,7 +45,7 @@ export const generateAStickman = (): THREE.Group => {
   return stickman;
 };
 
-export const getLoadingImage = (name: string): Object3D => {
+export const getLoadingImage = (resUrl: string): Object3D => {
   const node = new THREE.Object3D();
 
   // create loading state mesh
@@ -57,7 +57,7 @@ export const getLoadingImage = (name: string): Object3D => {
   node.add(loadingMesh);
 
   // fetch data
-  void getSingleEntity(getResourceName(name)).then((url) => {
+  void getSingleEntity(getResourceName(resUrl)).then((url) => {
     // create texture and material
     const textureLoader = new THREE.TextureLoader();
     textureLoader.setCrossOrigin('anonymous');
