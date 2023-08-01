@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Autocomplete } from '../common/Autocomplete/Autocomplete';
 import { useState } from 'react';
 import { type RelationTypeDto } from '../../types/generatedApi';
+import { Tooltip } from '../common/Tooltip/Tooltip';
 
 interface Props {
   graphUri: string;
@@ -60,14 +61,22 @@ export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRela
 
   const addRelationTypeOption = async (value: string) => {
     try {
-      await addRelationType({
+      const newRel = {
         relationName: value ?? '',
         relationUri: value ?? '',
-      });
+      };
+      await addRelationType(newRel);
       await refetchRelationTypes();
+      setSelectedRelationType(newRel);
     } catch {
       throw new Error(t('graphPage.addNewModal.addRelationTypeError'));
     }
+  };
+
+  const onClose = () => {
+    setOpen(false);
+    setSelectedRelationType(null);
+    reset();
   };
 
   const handleClick = () => {
@@ -76,7 +85,7 @@ export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRela
 
   const getBody = () => {
     return (
-      <BasicContainer>
+      <BasicContainer css={{ minHeight: '400px' }}>
         <Autocomplete<RelationTypeDto>
           options={relationTypes ?? []}
           value={selectedRelationType ?? null}
@@ -84,12 +93,16 @@ export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRela
             setSelectedRelationType(newVal);
             if (newVal === null) reset();
           }}
+          label={t('graphPage.addNewModal.selectRelation')}
           isClearable
           isLoading={relationTypesFetching}
           getOptionLabel={(rel) => rel.relationName ?? ''}
+          getNewOptionData={(value, label) => ({ relationName: typeof label === 'string' ? label : '' })}
           onCreateOption={(newRel) => addRelationTypeOption(newRel)}
         />
-        <BasicContainer css={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+        <BasicContainer
+          css={{ padding: 0, paddingTop: 10, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}
+        >
           <BasicInput
             onClearClick={reset}
             clearable
@@ -100,13 +113,15 @@ export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRela
             value={bindings.value}
             onChange={bindings.onChange}
           />
-          <Button
-            type='secondary'
-            onClick={handleClick}
-            disabled={!selectedRelationType}
-          >
-            {t('graphPage.addNewModal.search')}
-          </Button>
+          <Tooltip content={!selectedRelationType ? t('graphPage.addNewModal.searchTooltip') : ''}>
+            <Button
+              type='secondary'
+              onClick={handleClick}
+              disabled={!selectedRelationType}
+            >
+              {t('graphPage.addNewModal.search')}
+            </Button>
+          </Tooltip>
         </BasicContainer>
         <BasicContainer css={{ marginTop: '20px' }}>
           {lookupData?.docs?.map((entity) => {
@@ -137,7 +152,7 @@ export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRela
 
   return (
     <BasicModal
-      setOpen={setOpen}
+      onClose={onClose}
       open={open}
       body={getBody()}
       title={t('graphPage.addNewModal.title')}

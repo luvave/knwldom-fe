@@ -9,12 +9,18 @@
     "addNew": "Add new relation",
     "addNewModal": {
       "title": "Connect new entity",
-      "search": "Search",
+      "selectRelation": "Select or create relation type with the new entity",
+      "search": "Search for a entity",
+      "searchTooltip": "Please select or create relation type first",
       "searchPlaceholder": "Enter search keyword..",
       "addRelationError": "Unable to add relation",
       "addRelationTypeError": "Unable to add new relation type"
     },
     "error": "Something went wrong while loading graphs.",
     "initialGraphError": "Failed to get initial graph."
+  },
+  "common": {
+    "createNew": "Create new relation type \"{{input}}\"",
+    "close": "Close"
   }
 }

@@ -1,10 +1,11 @@
 import { type UserGraphDto } from '../../types/generatedApi';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FloatingContainer } from '../../components/common/Containers/FloatingContainer';
 import { Button } from '../../components/common/Buttons/Button';
 import { AddNewModal } from '../../components/AddNewModal/AddNewModal';
 import { useGetRelationForGraph } from '../../services/generatedApi/api';
 import { useTranslation } from 'react-i18next';
+import { Graph } from '../../components/Graph/Graph';
 
 interface Props {
   allGraphs: UserGraphDto[];
@@ -17,7 +18,7 @@ export const GraphPage = ({ initialGraph, allGraphs }: Props) => {
   const [addNewModalOpen, setAddNewModalOpen] = useState<boolean>(false);
 
   const { data, refetch } = useGetRelationForGraph(currentGraph.graph?.graphUri ?? '');
-  console.log(data);
+  const graphRef = useRef(null);
 
   return (
     <>
@@ -29,6 +30,13 @@ export const GraphPage = ({ initialGraph, allGraphs }: Props) => {
           {t('graphPage.addNew')}
         </Button>
       </FloatingContainer>
+
+      <Graph
+        graphStartUri={currentGraph.graph?.graphUri ?? ''}
+        graphRef={graphRef}
+        type='3D'
+        relations={data ?? []}
+      />
 
       <AddNewModal
         graphUri={currentGraph.graph?.graphUri ?? ''}

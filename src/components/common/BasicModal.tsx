@@ -1,15 +1,17 @@
 import { Modal, Text } from '@nextui-org/react';
 import { type ReactNode } from 'react';
 import { Button } from './Buttons/Button';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   open: boolean;
-  setOpen: (value: boolean) => void;
+  onClose: () => void;
   body: ReactNode;
   title: string;
 }
 
-export const BasicModal = ({ open, setOpen, body, title }: Props) => {
+export const BasicModal = ({ open, onClose, body, title }: Props) => {
+  const { t } = useTranslation();
   return (
     <Modal
       scroll
@@ -17,9 +19,7 @@ export const BasicModal = ({ open, setOpen, body, title }: Props) => {
       aria-labelledby='modal-title'
       aria-describedby='modal-description'
       open={open}
-      onClose={() => {
-        setOpen(false);
-      }}
+      onClose={onClose}
     >
       <Modal.Header>
         <Text
@@ -35,11 +35,9 @@ export const BasicModal = ({ open, setOpen, body, title }: Props) => {
           auto
           flat
           type='secondary'
-          onClick={() => {
-            setOpen(false);
-          }}
+          onClick={onClose}
         >
-          Close
+          {t('common.close')}
         </Button>
       </Modal.Footer>
     </Modal>

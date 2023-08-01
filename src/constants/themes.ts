@@ -6,4 +6,9 @@ export const lightTheme = createTheme({
 
 export const darkTheme = createTheme({
   type: 'dark',
+  theme: {
+    colors: {
+      // brand colors
+    },
+  },
 });

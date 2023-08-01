@@ -25,7 +25,7 @@ export const Button = ({ type, children, onClick, css, ...rest }: Props) => {
     <NextButton
       onPress={() => (onClick ? onClick() : undefined)}
       color={type}
-      css={{ ...css }}
+      css={{ ...css, zIndex: 0 }}
       {...rest}
     >
       {children}
