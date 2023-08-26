@@ -6,15 +6,23 @@
     "logout": "Log Out"
   },
   "graphPage": {
-    "addNew": "Add new relation",
+    "addNew": "Add new relation for {{name}}",
+    "searchUser": "Search user",
     "addNewModal": {
-      "title": "Connect new entity",
+      "title": "Connect new entity to {{name}}",
       "selectRelation": "Select or create relation type with the new entity",
       "search": "Search for a entity",
       "searchTooltip": "Please select or create relation type first",
       "searchPlaceholder": "Enter search keyword..",
       "addRelationError": "Unable to add relation",
       "addRelationTypeError": "Unable to add new relation type"
+    },
+    "searchUserModal": {
+      "title": "Search for users",
+      "search": "Search for a user",
+      "searchPlaceholder": "Enter search keyword..",
+      "searchTooltip": "Please type part of user's name first",
+      "userTooltip": "Go to graph {{graphName}}"
     },
     "error": "Something went wrong while loading graphs.",
     "initialGraphError": "Failed to get initial graph."

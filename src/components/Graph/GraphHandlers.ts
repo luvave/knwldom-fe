@@ -1,15 +1,18 @@
 import { type RelationDto } from '../../types/generatedApi';
 import { getResourceName, getResourceUrl } from '../../utils/resources';
 import SpriteText from 'three-spritetext';
+import { type GraphData, type GraphNode } from '../../types/graph';
 
-export const getGraphData = (relations: RelationDto[], graphStartUri: string) => {
+export const getGraphData = (relations: RelationDto[], initialNode: GraphNode): GraphData => {
   return {
     nodes: [
-      { id: graphStartUri, name: 'You', group: -1 },
-      ...(relations.map((c, index) => {
+      initialNode,
+      ...(relations.map((c) => {
         return {
-          id: c.to,
+          id: c.relationUri ?? '',
           name: getResourceName(c.to ?? ''),
+          uri: c.relationUri,
+          data: c.to,
           group: c.relationType?.relationName,
         };
       }) ?? []),
@@ -17,19 +20,19 @@ export const getGraphData = (relations: RelationDto[], graphStartUri: string) =>
     links:
       relations.map((c) => {
         return {
-          source: c.from,
-          target: c.to,
+          source: c.from ?? '',
+          target: c.relationUri ?? '',
           text: c.relationType?.relationName,
         };
       }) ?? [],
   };
 };
 
-export const getNodeLabel = (node: any) => {
+export const getNodeLabel = (node: GraphNode) => {
   return node.name;
 };
 
-export const focusOnNode = (node: any, graphRef: any) => {
+export const focusOnNode = (node: GraphNode, graphRef: any) => {
   if (!('x' in node) || !('y' in node) || !('z' in node) || graphRef.current === null) {
     return;
   }
@@ -58,9 +61,9 @@ export const focusOnNode = (node: any, graphRef: any) => {
   );
 };
 
-export const viewNodeInfo = (node: any) => {
-  if ('group' in node && 'name' in node && typeof node.name === 'string' && node.group !== -1) {
-    window.open(getResourceUrl(node.name), '_blank');
+export const viewNodeInfo = (node: GraphNode) => {
+  if ('group' in node && 'name' in node && typeof node.data === 'string' && node.group !== -1) {
+    window.open(getResourceUrl(node.data), '_blank');
   }
 };
 
@@ -82,4 +85,17 @@ export const linkPositionUpdate = (sprite: any, { start, end }: any) => {
   );
   // Position sprite
   Object.assign(sprite.position, middlePos);
+};
+
+export const mergeArraysOfRelations = (arr1: RelationDto[], arr2: RelationDto[]): RelationDto[] => {
+  const idMap = new Map();
+  for (const obj of arr1) {
+    idMap.set(obj.relationUri, obj);
+  }
+  for (const obj of arr2) {
+    if (!idMap.has(obj.relationUri)) {
+      idMap.set(obj.relationUri, obj);
+    }
+  }
+  return Array.from(idMap.values());
 };

@@ -2,7 +2,7 @@ import { Container, styled } from '@nextui-org/react';
 
 export const FloatingContainer = styled(Container, {
   position: 'absolute',
-  width: '200px',
+  width: 'fit-content',
   margin: '20px',
   zIndex: 2,
   variants: {

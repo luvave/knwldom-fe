@@ -13,16 +13,17 @@ import { Autocomplete } from '../common/Autocomplete/Autocomplete';
 import { useState } from 'react';
 import { type RelationTypeDto } from '../../types/generatedApi';
 import { Tooltip } from '../common/Tooltip/Tooltip';
+import { type GraphNode } from '../../types/graph';
 
 interface Props {
-  graphUri: string;
   open: boolean;
+  currentNode: GraphNode;
   setOpen: (value: boolean) => void;
   afterAddFunc: () => void;
   currentRelationCount: number;
 }
 
-export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRelationCount }: Props) => {
+export const AddNewModal = ({ currentNode, afterAddFunc, open, setOpen, currentRelationCount }: Props) => {
   const { t } = useTranslation();
   const { value, reset, bindings } = useInput('');
   const [selectedRelationType, setSelectedRelationType] = useState<RelationTypeDto | null>();
@@ -46,8 +47,8 @@ export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRela
         relationType: {
           relationUri: selectedRelationType?.relationUri,
         },
-        relationUri: `relation_${graphUri}_${currentRelationCount + 1}`,
-        from: graphUri,
+        relationUri: `relation_${currentNode.uri ?? ''}_${currentRelationCount + 1}`,
+        from: currentNode.uri,
         to: value,
       });
       if (typeof afterAddFunc === 'function') {
@@ -155,7 +156,7 @@ export const AddNewModal = ({ graphUri, afterAddFunc, open, setOpen, currentRela
       onClose={onClose}
       open={open}
       body={getBody()}
-      title={t('graphPage.addNewModal.title')}
+      title={t('graphPage.addNewModal.title', { name: currentNode.name })}
     />
   );
 };

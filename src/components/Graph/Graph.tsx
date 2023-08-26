@@ -9,27 +9,29 @@ import {
   linkPositionUpdate,
   viewNodeInfo,
 } from './GraphHandlers';
+import { type GraphNode } from '../../types/graph';
 
 interface Props {
   graphRef: any;
-  graphStartUri: string;
+  initialNode: GraphNode;
   relations: RelationDto[];
+  setCurrentNode: (node: GraphNode) => void;
   type: '3D' | '2D';
 }
 
-export const Graph = ({ graphStartUri, graphRef, relations, type }: Props) => {
-  const focusOnInitialNode = (node: any) => {
-    if (node.id === graphStartUri) {
+export const Graph = ({ initialNode, graphRef, relations, type, setCurrentNode }: Props) => {
+  const focusOnInitialNode = (node: GraphNode) => {
+    if (node.id === initialNode.uri) {
       return generateAStickman();
     }
-    return getLoadingImage(node.id);
+    return getLoadingImage(node.data ?? '');
   };
 
   if (type === '2D') {
     return (
       <ForceGraph2D
         ref={graphRef}
-        graphData={getGraphData(relations, graphStartUri)}
+        graphData={getGraphData(relations, initialNode)}
       />
     );
   }
@@ -39,13 +41,16 @@ export const Graph = ({ graphStartUri, graphRef, relations, type }: Props) => {
     <ForceGraph3D
       ref={graphRef}
       nodeThreeObject={focusOnInitialNode}
-      onNodeClick={(node) => {
+      onNodeClick={(node, e) => {
         focusOnNode(node, graphRef);
-        viewNodeInfo(node);
+        setCurrentNode(node);
+        if (e.ctrlKey) {
+          viewNodeInfo(node);
+        }
       }}
       linkThreeObjectExtend
       linkThreeObject={getLinkObject}
-      graphData={getGraphData(relations, graphStartUri)}
+      graphData={getGraphData(relations, initialNode)}
       linkPositionUpdate={linkPositionUpdate}
       nodeAutoColorBy='group'
       nodeLabel={getNodeLabel}

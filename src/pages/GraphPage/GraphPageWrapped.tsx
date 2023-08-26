@@ -10,11 +10,14 @@ import { Button } from '../../components/common/Buttons/Button';
 import { FloatingContainer } from '../../components/common/Containers/FloatingContainer';
 import { useTranslation } from 'react-i18next';
 import { getUserId } from '../../utils/auth';
+import { useParams } from 'react-router-dom';
 
 const GraphPageLoader = () => {
+  const { id } = useParams();
+
   const { user } = useAuth0();
   const { t } = useTranslation();
-  const { data, refetch } = useGetGraphsForTheUser(getUserId(user?.sub), { query: { suspense: true } });
+  const { data, refetch } = useGetGraphsForTheUser(id ?? getUserId(user?.sub), { query: { suspense: true } });
 
   const getInitialGraph = async () => {
     let graphs = data;
