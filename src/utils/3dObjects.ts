@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { getResourceName } from './resources';
 import { type Object3D } from 'three';
 import { getSingleEntity } from '../services/entities';
+import { getResourceDbpedia } from './resources';
 
 export const generateAStickman = (): THREE.Group => {
   const stickman = new THREE.Group();
@@ -57,7 +57,7 @@ export const getLoadingImage = (resUrl: string): Object3D => {
   node.add(loadingMesh);
 
   // fetch data
-  void getSingleEntity(getResourceName(resUrl)).then((url) => {
+  void getSingleEntity(getResourceDbpedia(resUrl)).then((url) => {
     // create texture and material
     const textureLoader = new THREE.TextureLoader();
     textureLoader.setCrossOrigin('anonymous');

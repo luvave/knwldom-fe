@@ -136,14 +136,18 @@ export const AddNewModal = ({ currentNode, afterAddFunc, open, setOpen, currentR
               return null;
             }
             return (
-              <Button
-                type='secondary'
-                light
+              <Tooltip
+                content={t('graphPage.addNewModal.addRelationTooltip')}
                 key={label[0]}
-                onClick={() => addEntity(formatResourceFromLookup(resource?.[0]))}
               >
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(label[0]) }} />
-              </Button>
+                <Button
+                  type='secondary'
+                  light
+                  onClick={() => addEntity(formatResourceFromLookup(resource?.[0]))}
+                >
+                  <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(label[0]) }} />
+                </Button>
+              </Tooltip>
             );
           }) ?? null}
         </BasicContainer>

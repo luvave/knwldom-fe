@@ -15,7 +15,8 @@
       "searchTooltip": "Please select or create relation type first",
       "searchPlaceholder": "Enter search keyword..",
       "addRelationError": "Unable to add relation",
-      "addRelationTypeError": "Unable to add new relation type"
+      "addRelationTypeError": "Unable to add new relation type",
+      "addRelationTooltip": "Click to add entity"
     },
     "searchUserModal": {
       "title": "Search for users",

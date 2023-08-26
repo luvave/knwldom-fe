@@ -2,11 +2,15 @@ export const getResourceUrl = (resource: string): string => {
   return resource.substring(1, resource.length - 1);
 };
 
-export const getResourceName = (resource: string): string => {
+export const getResourceDbpedia = (resource: string): string => {
   const removedBrackets = getResourceUrl(resource);
   const parts = removedBrackets.split('/');
-  const name = parts[parts.length - 1];
-  return decodeURIComponent(name.replace('_', ' '));
+  return parts[parts.length - 1];
+};
+
+export const getResourceName = (resource: string): string => {
+  const resourceDbpedia = getResourceDbpedia(resource);
+  return resourceDbpedia.replace(/_/g, ' ');
 };
 
 export const formatResourceFromLookup = (resource?: string): string => {
